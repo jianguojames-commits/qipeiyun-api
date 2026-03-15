@@ -1,0 +1,5 @@
+oe_number,sku,brand,category,name,description,vehicle,position,specs,uom,qty_per_unit,price,currency,supplier,barcode,weight,weight_unit,length_mm,width_mm,height_mm
+04465-0E010,AE010,BOSCH,制动片,前刹车片,高性能陶瓷配方,Toyota Camry 2015-2017,Front,"{""material"":""ceramic"",""thickness_mm"":16}",set,1,368,CNY,Toyota CN,6900000000012,1.8,kg,150,60,55
+17801-0H050,AF050,博世,air filter,空气滤清器,高效过滤,Toyota Corolla 2014+,Front,"{""filter_grade"":""HEPA""}",pcs,1,120,CNY,JD Parts,6900000000029,350,g,220,180,40
+90915-YZZE1,OF001,Denso,机滤,机油滤清器,长寿命,VW Golf 2013-2018,,"{""thread"":""M20x1.5""}",pcs,1,68,CNY,Suning,6900000000036,0.25,kg,70,70,80
+FK20HR11,SP001,电装,火花塞,铱金火花塞,耐久,TOYOTA RAV4 2019-2022,,"{""gap_mm"":0.7}",pcs,1,95,CNY,4S Store,6900000000043,0.05,kg,70,20,20

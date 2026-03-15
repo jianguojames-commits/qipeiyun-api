@@ -1,0 +1,5 @@
+part_id,oe_number,sku,brand,category,name,description,vehicle_make,vehicle_model,vehicle_year_start,vehicle_year_end,position,specs,uom,qty_per_unit,price,currency,supplier,barcode,weight_kg,length_mm,width_mm,height_mm,created_at
+ba0ed0e5df48a47b,044650E010,AE010,Bosch,Brake Pad,前刹车片,高性能陶瓷配方,Toyota,Camry,2015,2017,Front,"{""material"": ""ceramic"", ""thickness_mm"": 16}",set,1.0,368.0,CNY,Toyota CN,6900000000012,1.8,150.0,60.0,55.0,2025-11-13T16:31:18Z
+a26a722d4bd05006,178010H050,AF050,Bosch,Air Filter,空气滤清器,高效过滤,Toyota,Corolla,2014,,Front,"{""filter_grade"": ""HEPA""}",pcs,1.0,120.0,CNY,JD Parts,6900000000029,0.35,220.0,180.0,40.0,2025-11-13T16:31:18Z
+2998afdaa235c27c,90915YZZE1,OF001,Denso,Oil Filter,机油滤清器,长寿命,VW,Golf,2013,2018,,"{""thread"": ""M20x1.5""}",pcs,1.0,68.0,CNY,Suning,6900000000036,0.25,70.0,70.0,80.0,2025-11-13T16:31:18Z
+16ea06171cde2271,FK20HR11,SP001,Denso,Spark Plug,铱金火花塞,耐久,TOYOTA,RAV4,2019,2022,,"{""gap_mm"": 0.7}",pcs,1.0,95.0,CNY,4S Store,6900000000043,0.05,70.0,20.0,20.0,2025-11-13T16:31:18Z

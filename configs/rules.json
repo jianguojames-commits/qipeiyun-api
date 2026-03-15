@@ -1,0 +1,13 @@
+{
+  "price": {
+    "brake pad": { "min": 50, "max": 800 },
+    "air filter": { "min": 20, "max": 300 },
+    "oil filter": { "min": 20, "max": 300 },
+    "spark plug": { "min": 20, "max": 200 }
+  },
+  "required_specs_by_category": {
+    "brake pad": ["material", "thickness_mm"],
+    "spark plug": ["gap_mm", "heat_range"],
+    "air filter": ["length_mm", "width_mm", "height_mm"]
+  }
+}

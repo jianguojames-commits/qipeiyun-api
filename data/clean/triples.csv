@@ -1,0 +1,17 @@
+subject_id,subject_type,predicate,object_id,object_type,label
+part:ba0ed0e5df48a47b,Part,MADE_BY,brand:Bosch,Brand,Bosch
+part:ba0ed0e5df48a47b,Part,BELONGS_TO,category:Brake Pad,Category,Brake Pad
+part:ba0ed0e5df48a47b,Part,COMPATIBLE_WITH,vehicle:Toyota:Camry,Vehicle,Camry
+supplier:Toyota CN,Supplier,SUPPLIES,part:ba0ed0e5df48a47b,Part,Toyota CN
+part:a26a722d4bd05006,Part,MADE_BY,brand:Bosch,Brand,Bosch
+part:a26a722d4bd05006,Part,BELONGS_TO,category:Air Filter,Category,Air Filter
+part:a26a722d4bd05006,Part,COMPATIBLE_WITH,vehicle:Toyota:Corolla,Vehicle,Corolla
+supplier:JD Parts,Supplier,SUPPLIES,part:a26a722d4bd05006,Part,JD Parts
+part:2998afdaa235c27c,Part,MADE_BY,brand:Denso,Brand,Denso
+part:2998afdaa235c27c,Part,BELONGS_TO,category:Oil Filter,Category,Oil Filter
+part:2998afdaa235c27c,Part,COMPATIBLE_WITH,vehicle:VW:Golf,Vehicle,Golf
+supplier:Suning,Supplier,SUPPLIES,part:2998afdaa235c27c,Part,Suning
+part:16ea06171cde2271,Part,MADE_BY,brand:Denso,Brand,Denso
+part:16ea06171cde2271,Part,BELONGS_TO,category:Spark Plug,Category,Spark Plug
+part:16ea06171cde2271,Part,COMPATIBLE_WITH,vehicle:TOYOTA:RAV4,Vehicle,RAV4
+supplier:4S Store,Supplier,SUPPLIES,part:16ea06171cde2271,Part,4S Store

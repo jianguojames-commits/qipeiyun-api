@@ -1,0 +1,513 @@
+openapi: 3.0.3
+info:
+  title: 汽配云助手 API
+  description: |
+    汽车配件数据管理和库存查询系统 API 文档。
+    
+    ## 功能特性
+    - 配件数据查询（支持多条件组合）
+    - 全文搜索
+    - 品牌/类别/车型筛选
+    - 价格范围查询
+    - 数据统计
+    
+    ## 认证方式
+    当前版本无需认证，如需生产环境部署请联系管理员。
+  version: 2.0.0
+  contact:
+    name: 汽配云团队
+    email: support@qipeiyun.com
+
+servers:
+  - url: http://localhost:8000
+    description: 本地开发服务器
+  - url: https://api.qipeiyun.com
+    description: 生产服务器（暂未开放）
+
+tags:
+  - name: 查询接口
+    description: 配件库存查询相关接口
+  - name: 数据管理
+    description: 数据导入和管理接口
+  - name: 工具接口
+    description: 辅助工具和统计接口
+
+paths:
+  /api/parts:
+    get:
+      tags:
+        - 查询接口
+      summary: 查询配件列表
+      description: |
+        支持多条件组合查询配件库存数据。
+        
+        **查询参数说明：**
+        - `brand`: 品牌名称，支持模糊匹配（如 "Bosch"）
+        - `category`: 配件类别，支持模糊匹配（如 "Brake Pad"）
+        - `vehicle_make`: 适用车型品牌（如 "Toyota"）
+        - `vehicle_model`: 适用车型（如 "Camry"）
+        - `oe_number`: OE号，精确匹配（会自动转大写）
+        - `supplier`: 供应商名称
+        - `min_price`: 最低价格
+        - `max_price`: 最高价格
+        - `limit`: 返回结果数量限制（默认100，最大1000）
+        - `offset`: 偏移量，用于分页
+      parameters:
+        - name: brand
+          in: query
+          description: 品牌名称
+          schema:
+            type: string
+          example: Bosch
+        - name: category
+          in: query
+          description: 配件类别
+          schema:
+            type: string
+          example: Brake Pad
+        - name: vehicle_make
+          in: query
+          description: 车辆品牌
+          schema:
+            type: string
+          example: Toyota
+        - name: vehicle_model
+          in: query
+          description: 车辆型号
+          schema:
+            type: string
+          example: Camry
+        - name: oe_number
+          in: query
+          description: OE号（精确匹配）
+          schema:
+            type: string
+          example: "044650E010"
+        - name: supplier
+          in: query
+          description: 供应商
+          schema:
+            type: string
+        - name: min_price
+          in: query
+          description: 最低价格
+          schema:
+            type: number
+          example: 50
+        - name: max_price
+          in: query
+          description: 最高价格
+          schema:
+            type: number
+          example: 500
+        - name: limit
+          in: query
+          description: 返回结果数量限制
+          schema:
+            type: integer
+            default: 100
+            maximum: 1000
+          example: 50
+        - name: offset
+          in: query
+          description: 偏移量（用于分页）
+          schema:
+            type: integer
+            default: 0
+          example: 0
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    description: 返回结果数量
+                    example: 2
+                  total:
+                    type: integer
+                    description: 符合条件总数
+                    example: 2
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Part'
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/parts/{part_id}:
+    get:
+      tags:
+        - 查询接口
+      summary: 根据ID获取配件详情
+      parameters:
+        - name: part_id
+          in: path
+          required: true
+          description: 配件唯一标识符
+          schema:
+            type: string
+          example: ba0ed0e5df48a47b
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Part'
+        '404':
+          description: 配件不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/parts/search:
+    get:
+      tags:
+        - 查询接口
+      summary: 全文搜索配件
+      description: |
+        在配件名称、描述、OE号、SKU中搜索关键词。
+      parameters:
+        - name: keyword
+          in: query
+          required: true
+          description: 搜索关键词
+          schema:
+            type: string
+          example: 刹车片
+        - name: limit
+          in: query
+          description: 返回结果数量限制
+          schema:
+            type: integer
+            default: 20
+          example: 20
+      responses:
+        '200':
+          description: 搜索成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  keyword:
+                    type: string
+                    example: 刹车片
+                  count:
+                    type: integer
+                    example: 5
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Part'
+
+  /api/brands:
+    get:
+      tags:
+        - 工具接口
+      summary: 获取所有品牌列表
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 5
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Bosch", "Denso", "Valeo"]
+
+  /api/categories:
+    get:
+      tags:
+        - 工具接口
+      summary: 获取所有配件类别
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 8
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Brake Pad", "Oil Filter", "Air Filter"]
+
+  /api/vehicles:
+    get:
+      tags:
+        - 工具接口
+      summary: 获取所有车辆品牌列表
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 10
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Toyota", "Honda", "BMW"]
+
+  /api/stats:
+    get:
+      tags:
+        - 工具接口
+      summary: 获取数据库统计信息
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Stats'
+
+  /api/price-range:
+    get:
+      tags:
+        - 工具接口
+      summary: 获取价格范围
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      min:
+                        type: number
+                        example: 20
+                      max:
+                        type: number
+                        example: 2000
+                      avg:
+                        type: number
+                        example: 158.5
+
+components:
+  schemas:
+    Part:
+      type: object
+      description: 配件信息
+      properties:
+        part_id:
+          type: string
+          description: 配件唯一标识符
+          example: ba0ed0e5df48a47b
+        oe_number:
+          type: string
+          description: OE号（原厂编号）
+          example: "044650E010"
+        sku:
+          type: string
+          description: SKU编码
+          example: AE010
+        brand:
+          type: string
+          description: 品牌名称
+          example: Bosch
+        category:
+          type: string
+          description: 配件类别
+          example: Brake Pad
+        name:
+          type: string
+          description: 配件名称
+          example: 前刹车片
+        description:
+          type: string
+          description: 详细描述
+          example: 高性能陶瓷配方
+        vehicle_make:
+          type: string
+          description: 适用车型品牌
+          example: Toyota
+        vehicle_model:
+          type: string
+          description: 适用车型
+          example: Camry
+        vehicle_year_start:
+          type: integer
+          description: 适用年份起始
+          example: 2015
+        vehicle_year_end:
+          type: integer
+          description: 适用年份结束
+          example: 2017
+        position:
+          type: string
+          description: 安装位置
+          example: Front
+        specs:
+          type: object
+          description: 规格参数（JSON）
+          example:
+            material: ceramic
+            thickness_mm: 16
+        uom:
+          type: string
+          description: 单位
+          example: set
+        qty_per_unit:
+          type: number
+          description: 单位数量
+          example: 1
+        price:
+          type: number
+          description: 价格
+          example: 368
+        currency:
+          type: string
+          description: 货币单位
+          example: CNY
+        supplier:
+          type: string
+          description: 供应商
+          example: Toyota CN
+        barcode:
+          type: string
+          description: 条码
+          example: "6900000000012"
+        weight_kg:
+          type: number
+          description: 重量（公斤）
+          example: 1.8
+        length_mm:
+          type: number
+          description: 长度（毫米）
+          example: 150
+        width_mm:
+          type: number
+          description: 宽度（毫米）
+          example: 60
+        height_mm:
+          type: number
+          description: 高度（毫米）
+          example: 55
+        created_at:
+          type: string
+          description: 创建时间
+          example: "2025-11-13T16:31:18Z"
+        updated_at:
+          type: string
+          description: 更新时间
+          example: "2025-11-13T16:31:18Z"
+
+    Stats:
+      type: object
+      description: 数据库统计信息
+      properties:
+        total_parts:
+          type: integer
+          description: 总配件数
+          example: 1500
+        unique_brands:
+          type: integer
+          description: 品牌数量
+          example: 25
+        unique_categories:
+          type: integer
+          description: 类别数量
+          example: 12
+        price_range:
+          type: object
+          properties:
+            min:
+              type: number
+              example: 20
+            max:
+              type: number
+              example: 2000
+            avg:
+              type: number
+              example: 158.5
+
+    ErrorResponse:
+      type: object
+      description: 错误响应
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 请求参数错误
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
